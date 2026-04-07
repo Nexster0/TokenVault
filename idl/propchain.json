@@ -1,0 +1,110 @@
+{
+  "version": "0.1.0",
+  "name": "propchain",
+  "instructions": [
+    {
+      "name": "initializeAsset",
+      "accounts": [
+        { "name": "asset", "isMut": true, "isSigner": false },
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "assetId", "type": "string" },
+        { "name": "name", "type": "string" },
+        { "name": "totalValue", "type": "u64" },
+        { "name": "totalTokens", "type": "u64" }
+      ]
+    },
+    {
+      "name": "verifyAsset",
+      "accounts": [
+        { "name": "asset", "isMut": true, "isSigner": false },
+        { "name": "authority", "isMut": false, "isSigner": true }
+      ],
+      "args": [
+        { "name": "docHash", "type": { "array": ["u8", 32] } }
+      ]
+    },
+    {
+      "name": "buyFraction",
+      "accounts": [
+        { "name": "asset", "isMut": true, "isSigner": false },
+        { "name": "userState", "isMut": true, "isSigner": false },
+        { "name": "buyer", "isMut": true, "isSigner": true },
+        { "name": "platformWallet", "isMut": true, "isSigner": false },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "tokenAmount", "type": "u64" }
+      ]
+    },
+    {
+      "name": "depositYield",
+      "accounts": [
+        { "name": "asset", "isMut": true, "isSigner": false },
+        { "name": "authority", "isMut": true, "isSigner": true },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": [
+        { "name": "amount", "type": "u64" }
+      ]
+    },
+    {
+      "name": "claimYield",
+      "accounts": [
+        { "name": "asset", "isMut": true, "isSigner": false },
+        { "name": "userState", "isMut": true, "isSigner": false },
+        { "name": "user", "isMut": true, "isSigner": true },
+        { "name": "yieldVault", "isMut": true, "isSigner": false },
+        { "name": "systemProgram", "isMut": false, "isSigner": false }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "AssetAccount",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "assetId", "type": "string" },
+          { "name": "name", "type": "string" },
+          { "name": "authority", "type": "publicKey" },
+          { "name": "totalValue", "type": "u64" },
+          { "name": "totalTokens", "type": "u64" },
+          { "name": "tokensSold", "type": "u64" },
+          { "name": "isVerified", "type": "bool" },
+          { "name": "docHash", "type": { "array": ["u8", 32] } },
+          { "name": "totalYieldDeposited", "type": "u64" },
+          { "name": "yieldPerToken", "type": "u64" },
+          { "name": "bump", "type": "u8" }
+        ]
+      }
+    },
+    {
+      "name": "UserState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          { "name": "user", "type": "publicKey" },
+          { "name": "assetId", "type": "string" },
+          { "name": "tokensOwned", "type": "u64" },
+          { "name": "yieldClaimed", "type": "u64" },
+          { "name": "lastClaimTimestamp", "type": "i64" },
+          { "name": "bump", "type": "u8" }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    { "code": 6000, "name": "InsufficientTokens", "msg": "Not enough tokens available" },
+    { "code": 6001, "name": "AssetNotVerified", "msg": "Asset must be verified before purchase" },
+    { "code": 6002, "name": "Unauthorized", "msg": "Unauthorized action" },
+    { "code": 6003, "name": "NoYieldToClaim", "msg": "No yield available to claim" },
+    { "code": 6004, "name": "InvalidAmount", "msg": "Invalid amount specified" }
+  ],
+  "metadata": {
+    "address": "AChm6qgo74Fe5jDVokJj9Nyz16shZdFZsYuL4GM5ocjf"
+  }
+}
